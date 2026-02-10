@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0a0a0a;
+  --card: #141414;
+  --border: #222;
+  --green: #2ecc71;
+  --red: #e74c3c;
+  --yellow: #f39c12;
+}
+
+body {
+  background: var(--bg);
+  color: #e0e0e0;
+}
+
+.score-gauge {
+  background: conic-gradient(
+    var(--score-color) calc(var(--score-pct) * 3.6deg),
+    #222 0deg
+  );
+}
