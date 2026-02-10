@@ -17,6 +17,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <script src="https://cdn.usefathom.com/script.js" data-site="NRRPPRVC" defer></script>
+      </head>
       <body className={inter.className}>
         <nav className="border-b border-[#222] px-6 py-4 flex items-center justify-between">
           <a href="/" className="text-xl font-bold tracking-tight">
