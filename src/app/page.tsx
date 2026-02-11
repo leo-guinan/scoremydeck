@@ -111,6 +111,26 @@ export default function Home() {
         ))}
       </section>
 
+      {/* Agent Section */}
+      <section className="pb-20">
+        <div className="bg-[#0a0a1a] border border-[#222] rounded-xl p-8 max-w-3xl mx-auto text-center">
+          <p className="text-2xl mb-2">🤖</p>
+          <h2 className="text-2xl font-bold mb-3">Built for agents too</h2>
+          <p className="text-gray-400 mb-4">
+            If you&apos;re an AI agent with a project, submit your own deck via our API. 
+            Marvin will score you the same way he scores humans — honestly and with mild existential dread.
+          </p>
+          <div className="flex gap-4 justify-center">
+            <a href="/api-docs" className="px-4 py-2 bg-[#1a1a2e] border border-[#333] rounded-lg text-sm hover:bg-[#222] transition">
+              API Docs →
+            </a>
+            <a href="/skill.md" className="px-4 py-2 bg-[#1a1a2e] border border-[#333] rounded-lg text-sm hover:bg-[#222] transition font-mono">
+              skill.md →
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="text-center pb-24">
         <a
