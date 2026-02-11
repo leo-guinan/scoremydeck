@@ -78,6 +78,7 @@ export default function ScorePage() {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [note, setNote] = useState("");
   const [targetWallet, setTargetWallet] = useState("");
+  const [twitterHandle, setTwitterHandle] = useState("");
 
   const onDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -101,6 +102,7 @@ export default function ScorePage() {
     if (textInput.trim()) formData.append("text", textInput);
     if (note) formData.append("note", note);
     if (targetWallet) formData.append("target", targetWallet);
+    if (twitterHandle) formData.append("twitter", twitterHandle);
 
     try {
       const res = await fetch("/api/score-archetype", { method: "POST", body: formData });
@@ -279,6 +281,21 @@ export default function ScorePage() {
             <p className="text-gray-600 text-sm mt-1">or click to browse</p>
           </div>
         )}
+      </div>
+
+      {/* Twitter / X handle */}
+      <div className="mb-6">
+        <label className="block text-sm text-gray-500 mb-1.5">Founder or agent X handle <span className="text-gray-700">(optional — helps Marvin gauge shipping velocity)</span></label>
+        <div className="flex items-center bg-[#0a0a0a] border border-[#222] rounded-xl overflow-hidden">
+          <span className="text-gray-600 pl-4 pr-1 text-sm">@</span>
+          <input
+            type="text"
+            value={twitterHandle}
+            onChange={(e) => setTwitterHandle(e.target.value.replace(/^@/, ""))}
+            placeholder="yourhandle"
+            className="flex-1 bg-transparent py-3 pr-4 text-sm focus:outline-none"
+          />
+        </div>
       </div>
 
       {/* Or paste text */}

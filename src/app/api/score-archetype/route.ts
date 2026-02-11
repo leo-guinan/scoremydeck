@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
     const textInput = formData.get("text") as string | null;
     const buyerNote = formData.get("note") as string | null;
     const targetWallet = formData.get("target") as string | null;
+    const twitterHandle = formData.get("twitter") as string | null;
 
     if (!file && !textInput) {
       return NextResponse.json(
@@ -50,7 +51,7 @@ export async function POST(request: NextRequest) {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const parts: any[] = [
-      { text: SCORING_PROMPT + "\n\nAnalyze this pitch deck:" },
+      { text: SCORING_PROMPT + (twitterHandle ? `\n\nFounder/agent X handle: @${twitterHandle}` : "") + "\n\nAnalyze this pitch deck:" },
     ];
 
     if (base64Data) {
@@ -112,6 +113,7 @@ export async function POST(request: NextRequest) {
             ...analysis,
             buyerNote,
             targetWallet,
+            twitterHandle,
             portfolioChart: formatPortfolioChart(archetypeScores),
           },
           null,
@@ -128,6 +130,7 @@ export async function POST(request: NextRequest) {
       deliveryReady: !!targetWallet,
       buyerNote: buyerNote || null,
       targetWallet: targetWallet || null,
+      twitterHandle: twitterHandle || null,
     });
   } catch (err: unknown) {
     console.error("Archetype score error:", err);
