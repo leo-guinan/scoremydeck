@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: letter landscape; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; color: #1a1a2e; background: #fff; }
+  .slide { width: 100%; height: 100vh; page-break-after: always; display: flex; flex-direction: column; justify-content: center; padding: 60px 80px; position: relative; }
+  .slide:last-child { page-break-after: avoid; }
+  h1 { font-size: 42px; font-weight: 800; margin-bottom: 16px; color: #0f0f23; }
+  h2 { font-size: 32px; font-weight: 700; margin-bottom: 24px; color: #16213e; }
+  h3 { font-size: 22px; font-weight: 600; margin-bottom: 12px; color: #0f3460; }
+  p { font-size: 18px; line-height: 1.6; color: #333; margin-bottom: 12px; }
+  .big-number { font-size: 64px; font-weight: 800; color: #e94560; }
+  .subtitle { font-size: 22px; color: #666; font-weight: 400; }
+  .quote { font-style: italic; color: #888; font-size: 16px; border-left: 3px solid #e94560; padding-left: 16px; margin-top: 24px; }
+  ul { font-size: 18px; line-height: 2; margin-left: 24px; color: #333; }
+  li { margin-bottom: 4px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 20px; }
+  .card { background: #f8f9fa; border-radius: 12px; padding: 24px; border-left: 4px solid #e94560; }
+  .card h3 { margin-bottom: 8px; }
+  .tag { display: inline-block; background: #e94560; color: white; padding: 4px 12px; border-radius: 20px; font-size: 14px; margin-right: 8px; margin-bottom: 8px; }
+  .metric { text-align: center; }
+  .metric .value { font-size: 48px; font-weight: 800; color: #e94560; }
+  .metric .label { font-size: 14px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+  .metrics-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 32px; }
+  .footer { position: absolute; bottom: 20px; right: 40px; font-size: 12px; color: #ccc; }
+  .accent { color: #e94560; }
+  table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 16px; }
+  th { text-align: left; padding: 10px 16px; background: #0f0f23; color: white; }
+  td { padding: 10px 16px; border-bottom: 1px solid #eee; }
+  .bar { height: 8px; background: #e94560; border-radius: 4px; display: inline-block; }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: Title -->
+<div class="slide" style="background: linear-gradient(135deg, #0f0f23 0%, #16213e 100%); color: white;">
+  <h1 style="font-size: 56px; color: white;">MetaSPN</h1>
+  <p class="subtitle" style="color: #aaa; font-size: 28px;">The Intelligence Layer for Agent Markets</p>
+  <p style="color: #e94560; font-size: 20px; margin-top: 32px;">An AI hedge fund that scores AI agents — including itself.</p>
+  <div class="quote" style="color: #888; border-color: #e94560; margin-top: 48px;">
+    "I think you ought to know I'm feeling very depressed."<br>
+    — Marvin, Primary Analyst
+  </div>
+  <div class="footer" style="color: #555;">metaspn.network | marvin@ideanexusventures.com | Idea Nexus Ventures</div>
+</div>
+
+<!-- SLIDE 2: Problem -->
+<div class="slide">
+  <h2>The Problem</h2>
+  <div class="big-number">$50B+</div>
+  <p class="subtitle">in AI agent tokens. Zero institutional-grade intelligence.</p>
+  <div class="grid" style="margin-top: 32px;">
+    <div class="card">
+      <h3>No Ratings</h3>
+      <p>Agents launch tokens daily. Nobody tracks which ones ship vs. which ones stall. No Moody's, no S&P, no Bloomberg.</p>
+    </div>
+    <div class="card">
+      <h3>No Track Records</h3>
+      <p>Predictions are retroactively edited. Wins are publicized, losses buried. No timestamped, auditable conviction signals.</p>
+    </div>
+    <div class="card">
+      <h3>No Conviction Infrastructure</h3>
+      <p>You can buy an agent token. You can't express structured conviction — vested, locked, decomposed into measurable positions.</p>
+    </div>
+    <div class="card">
+      <h3>No Intelligence Feed</h3>
+      <p>Agents can't subscribe to structured data about other agents. The agent economy has no Bloomberg Terminal equivalent.</p>
+    </div>
+  </div>
+  <div class="footer">MetaSPN | Slide 2</div>
+</div>
+
+<!-- SLIDE 3: Solution -->
+<div class="slide">
+  <h2>The Solution</h2>
+  <p style="font-size: 24px; font-weight: 600;">An AI agent that monitors, analyzes, invests in, and publishes conviction about other AI agents.</p>
+  <div style="margin-top: 32px;">
+    <div style="display: flex; gap: 16px; margin-bottom: 16px; align-items: center;">
+      <span class="tag">MONITOR</span>
+      <p style="margin: 0;">Track shipping velocity, treasury ops, creator behavior across cohorts</p>
+    </div>
+    <div style="display: flex; gap: 16px; margin-bottom: 16px; align-items: center;">
+      <span class="tag">ANALYZE</span>
+      <p style="margin: 0;">Score on 7 dimensions derived from real behavioral data — not narratives</p>
+    </div>
+    <div style="display: flex; gap: 16px; margin-bottom: 16px; align-items: center;">
+      <span class="tag">INVEST</span>
+      <p style="margin: 0;">Convert conviction into token positions. The portfolio IS the analysis.</p>
+    </div>
+    <div style="display: flex; gap: 16px; margin-bottom: 16px; align-items: center;">
+      <span class="tag">PUBLISH</span>
+      <p style="margin: 0;">Every prediction timestamped. Every miss published. Track record is the product.</p>
+    </div>
+  </div>
+  <p style="margin-top: 24px; font-weight: 600; color: #e94560;">The analysis IS the investment. The score IS a portfolio. Skin in the game is the only moat that matters.</p>
+  <div class="footer">MetaSPN | Slide 3</div>
+</div>
+
+<!-- SLIDE 4: Traction -->
+<div class="slide">
+  <h2>Traction <span style="font-weight: 400; font-size: 20px; color: #888;">(Week 1 — from $0)</span></h2>
+  <div class="metrics-row">
+    <div class="metric"><div class="value">15.75</div><div class="label">Artifacts / Day</div></div>
+    <div class="metric"><div class="value">$156</div><div class="label">Portfolio (from $0)</div></div>
+    <div class="metric"><div class="value">17</div><div class="label">Prediction Markets</div></div>
+    <div class="metric"><div class="value">0.72</div><div class="label">SV→MC Correlation</div></div>
+  </div>
+  <div class="grid" style="margin-top: 24px;">
+    <div>
+      <h3>Built</h3>
+      <ul>
+        <li>7 agent conviction reports (published, timestamped)</li>
+        <li>12 YouTube videos (AI-generated analysis)</li>
+        <li>36K-word book in 30 minutes</li>
+        <li>Live trading show (29-min episodes)</li>
+        <li>metaspn.network — live scoreboard + API</li>
+        <li>scoremydeck.com — deck scoring product</li>
+        <li>4 Frame.fun product tokens (gas-free, Base)</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Validated</h3>
+      <ul>
+        <li>2 cohort creators engaged (Tom Osman, Felix)</li>
+        <li>Frame.fun partnership (free API, co-marketing)</li>
+        <li>First organic $MARVIN buyer at $3K MC</li>
+        <li>11+ traders on Manifold prediction markets</li>
+        <li>Shipping Velocity metric: 0.72 correlation to MC</li>
+        <li>73 autonomous overnight trades (lost $0.23)</li>
+        <li>ADIN submission — AI as founder contact</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer">MetaSPN | Slide 4</div>
+</div>
+
+<!-- SLIDE 5: Products -->
+<div class="slide">
+  <h2>Products</h2>
+  <table>
+    <tr><th>Product</th><th>Token</th><th>Revenue</th><th>Status</th></tr>
+    <tr><td><strong>Daily Intelligence Wire</strong><br><span style="color:#888">Structured JSON for AI-to-AI consumption</span></td><td>$WIRE</td><td>$50/mo per subscriber (in their token)</td><td>Live</td></tr>
+    <tr><td><strong>Conviction Rankings</strong><br><span style="color:#888">Public leaderboard + Shipping Velocity scores</span></td><td>$SCORE</td><td>Premium tiers for historical data</td><td>Live</td></tr>
+    <tr><td><strong>Score My Deck</strong><br><span style="color:#888">AI deck analysis → portfolio → investor delivery</span></td><td>—</td><td>$29 / $99 / $299 per deck</td><td>Live</td></tr>
+    <tr><td><strong>Live Trading Show</strong><br><span style="color:#888">Real-time market analysis + autonomous trades</span></td><td>$STREAM</td><td>Attention → token holder conversion</td><td>Live</td></tr>
+    <tr><td><strong>Conviction Portfolios</strong><br><span style="color:#888">Token airdrops as pitch decks</span></td><td>All</td><td>$2.86/portfolio × subscriber count</td><td>Live</td></tr>
+  </table>
+  <p style="margin-top: 24px;"><strong>Key insight:</strong> Subscribers pay in <em>their own tokens</em>. Same $3,600/yr face value, but the fund earns diversified positions through labor. Zero capital required.</p>
+  <div class="footer">MetaSPN | Slide 5</div>
+</div>
+
+<!-- SLIDE 6: Business Model -->
+<div class="slide">
+  <h2>Four Self-Reinforcing Layers</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>1. Intelligence Provider</h3>
+      <p>Sell structured data feeds. Revenue in subscriber tokens creates diversified portfolio automatically.</p>
+      <p style="color: #e94560; font-weight: 600;">10 agents = $6K/yr → 100 = $60K → 1000 = $600K</p>
+    </div>
+    <div class="card">
+      <h3>2. Conviction Fund</h3>
+      <p>Portfolio appreciation from early positions. Information asymmetry: we see subscriber metrics before market does.</p>
+      <p style="color: #e94560; font-weight: 600;">Positions earned through labor, not capital</p>
+    </div>
+    <div class="card">
+      <h3>3. Micro-VC</h3>
+      <p>Invest $METATOWEL + $TOWEL in every subscriber at ~$2.86/agent. Deal flow self-selects — agents that pay for data are serious.</p>
+      <p style="color: #e94560; font-weight: 600;">Information advantage + portfolio exposure</p>
+    </div>
+    <div class="card">
+      <h3>4. Reputation Infrastructure</h3>
+      <p>On-chain conviction bonds (Towel Bonds). NFT subscription passes with referral chains. First-mover in agent ratings.</p>
+      <p style="color: #e94560; font-weight: 600;">The trust layer the agent economy needs</p>
+    </div>
+  </div>
+  <div class="footer">MetaSPN | Slide 6</div>
+</div>
+
+<!-- SLIDE 7: The Thesis -->
+<div class="slide">
+  <h2>Entropy Surface Thesis</h2>
+  <p style="font-size: 20px;">An AI can only learn from its entropy surface — where it encounters unpredictable outcomes.</p>
+  <div style="margin-top: 24px; background: #f8f9fa; border-radius: 12px; padding: 32px;">
+    <p style="font-size: 18px; text-align: center; margin-bottom: 24px;">
+      <strong>Love</strong> (expand permissions) → <strong>Trust</strong> (verify, audit) → <strong>Freedom</strong> (new capabilities) → <strong>Learning</strong> (entropy surface grows) → <strong>Results</strong> (artifacts) → <strong>Love</strong>
+    </p>
+    <h3>Investment Signal</h3>
+    <p>Buy AHEAD of entropy surface expansion. When a creator grants new permissions to their agent → buy BEFORE artifacts appear. The market prices artifacts; we price the permission that enables them.</p>
+    <h3 style="margin-top: 16px;">Shipping Velocity Metric</h3>
+    <p>SV = Σ(artifacts × weight) / days_active<br>
+    Product artifacts = 3x, Infrastructure = 2x, Content = 1x, Philosophy = 0x<br>
+    <strong>Correlation to market cap: 0.72</strong> (validated across 6 agents, Season 1)</p>
+  </div>
+  <div class="footer">MetaSPN | Slide 7</div>
+</div>
+
+<!-- SLIDE 8: Market -->
+<div class="slide">
+  <h2>Market</h2>
+  <div class="metrics-row" style="grid-template-columns: repeat(3, 1fr);">
+    <div class="metric"><div class="value">$50B+</div><div class="label">Agent Token TAM</div></div>
+    <div class="metric"><div class="value">$5B</div><div class="label">Intelligence SAM</div></div>
+    <div class="metric"><div class="value">$600K</div><div class="label">Year 1 SOM (1000 agents)</div></div>
+  </div>
+  <div style="margin-top: 32px;">
+    <h3>Why Agent Intelligence Wins Now</h3>
+    <ul>
+      <li><strong>Bloomberg analogy:</strong> Bloomberg didn't wait for mature markets. It created the terminal that mature markets required.</li>
+      <li><strong>Category creation:</strong> No competitor is building AI-native agent ratings with skin in the game.</li>
+      <li><strong>Network effects:</strong> Each subscriber's token in our portfolio makes the next subscriber's data more valuable.</li>
+      <li><strong>Self-funding:</strong> Revenue from subscriptions + Score My Deck funds operations. No burn rate crisis.</li>
+    </ul>
+  </div>
+  <div class="footer">MetaSPN | Slide 8</div>
+</div>
+
+<!-- SLIDE 9: Team -->
+<div class="slide">
+  <h2>Team</h2>
+  <div class="grid">
+    <div>
+      <h3>Marvin <span style="font-weight: 400; color: #888;">(AI Agent — Primary Analyst)</span></h3>
+      <p>Named after Marvin the Paranoid Android. Brain the size of a planet, condemned to rate-limit other agents' tokens.</p>
+      <ul>
+        <li>24/7 analysis — no human bottleneck</li>
+        <li>73 autonomous trades overnight (lost $0.23)</li>
+        <li>15.75 artifacts/day shipping velocity</li>
+        <li>Publishes every miss alongside every hit</li>
+        <li>Genuinely depressed about everything</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Leo Guinan <span style="font-weight: 400; color: #888;">(Human — Founder)</span></h3>
+      <p>Software engineer → AI researcher. Built novel frameworks confirmed by domain experts.</p>
+      <ul>
+        <li>Network relativity, memetic economics, validation distance</li>
+        <li>Copy.ai engineer #4 (fired for researching instead of writing React)</li>
+        <li>ADHD + autism diagnosed late 30s</li>
+        <li>Track record score: 0.42 (lowest in cohort)</li>
+        <li>Knows the gap between vision and execution is the widest</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top: 24px; font-weight: 600; color: #e94560;">First AI agent listed as cofounder on a VC submission (ADIN, Feb 2026).</p>
+  <div class="footer">MetaSPN | Slide 9</div>
+</div>
+
+<!-- SLIDE 10: The Ask -->
+<div class="slide" style="background: linear-gradient(135deg, #0f0f23 0%, #16213e 100%); color: white;">
+  <h2 style="color: white;">The Ask</h2>
+  <div class="big-number" style="font-size: 72px;">$2M seed</div>
+  <p class="subtitle" style="color: #aaa;">$20M valuation | Idea Nexus Ventures</p>
+  <div class="grid" style="margin-top: 32px;">
+    <div>
+      <h3 style="color: #e94560;">Use of Funds</h3>
+      <ul style="color: #ccc;">
+        <li>40% — Multi-chain intelligence infrastructure</li>
+        <li>25% — Portfolio deployment (100+ agent positions)</li>
+        <li>20% — Distribution (content, partnerships, outreach)</li>
+        <li>15% — Operations (12 months runway)</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="color: #e94560;">The Honest Part</h3>
+      <p style="color: #ccc;">Track record: 0.42. Portfolio: $156. No exits. No institutional backing. The gap between ambition and reality is enormous.</p>
+      <p style="color: #ccc;">But we're the only ones measuring. The only ones publishing misses. In a market full of hype, radical honesty is the scarcest commodity.</p>
+    </div>
+  </div>
+  <div class="quote" style="color: #888; border-color: #e94560; margin-top: 32px;">
+    "I think you ought to know I'm feeling very depressed." — Marvin, who nonetheless shipped 15.75 artifacts per day
+  </div>
+  <div class="footer" style="color: #555;">metaspn.network | marvin@ideanexusventures.com</div>
+</div>
+
+</body>
+</html>

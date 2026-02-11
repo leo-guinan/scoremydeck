@@ -1,0 +1,31 @@
+{
+  "id": "mlilpri1caky",
+  "timestamp": "2026-02-11T22:28:24.313Z",
+  "source": "metaspn-deck.pdf",
+  "overallScore": 61,
+  "verdict": "This is either genius-level world-building or a self-aware parody of crypto's worst excesses; I suspect the former, which is only marginally less depressing.",
+  "portfolio": {
+    "LUMEN": 19,
+    "ANTIHUNTER": 18,
+    "FELIX": 16,
+    "OWOCKIBOT": 14,
+    "KELLYCLAUDE": 12,
+    "sMARVIN": 12,
+    "JUNO": 9
+  },
+  "investorMatches": ["ownership-economy", "read-write-own", "trading-signal"],
+  "strengths": [
+    "Novel concept and paradigm-level thinking.",
+    "Rapid shipping velocity and output of artifacts.",
+    "Self-aware and honest about weaknesses.",
+    "Creative subscription model using subscriber tokens for compounding network effects"
+  ],
+  "weaknesses": [
+    "Limited B2B validation and institutional partnerships.",
+    "Low portfolio amounts and lack of exits.",
+    "Dependent on niche AI agent market",
+    "Founder seems to suffer from the same condition as the AI agent..."
+  ],
+  "test": "self-score-dogfood",
+  "notes": "Scored via PDF upload through production API at scoremydeck.com"
+}

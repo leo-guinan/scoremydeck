@@ -2,35 +2,56 @@
 
 import { useState, useCallback } from "react";
 
-interface CategoryScores {
-  problem: number;
-  solution: number;
-  market_size: number;
-  traction: number;
-  team: number;
-  financials: number;
-  design_clarity: number;
-  investability: number;
-  narrative: number;
-  ask: number;
+interface ArchetypeResult {
+  token: string;
+  archetype: string;
+  score: number;
+  weight: number;
+  tokenAmount: number;
+  reasoning: string;
 }
 
-interface ScoreResult {
-  overall_score: number;
-  category_scores: CategoryScores;
+interface AnalysisResult {
+  id: string;
+  overallScore: number;
+  verdict: string;
+  archetypes: ArchetypeResult[];
+  portfolio: Record<string, number>;
+  investorMatches: string[];
   strengths: string[];
   weaknesses: string[];
-  vc_feedback: string;
-  one_line_verdict: string;
+  buyerNote: string | null;
+  targetWallet: string | null;
+  deliveryReady: boolean;
 }
 
+const TOKEN_COLORS: Record<string, string> = {
+  ANTIHUNTER: "#ef4444",
+  FELIX: "#3b82f6",
+  JUNO: "#22c55e",
+  LUMEN: "#a855f7",
+  KELLYCLAUDE: "#eab308",
+  OWOCKIBOT: "#06b6d4",
+  sMARVIN: "#6b7280",
+};
+
+const TOKEN_LABELS: Record<string, string> = {
+  ANTIHUNTER: "🏗️ Operational Dominance",
+  FELIX: "⚙️ Technical Depth",
+  JUNO: "🏢 Institutional Builder",
+  LUMEN: "💡 Regime Thinker",
+  KELLYCLAUDE: "📣 Distribution Machine",
+  OWOCKIBOT: "🤝 Coordination Network",
+  sMARVIN: "🔍 Analysis Layer",
+};
+
 function ScoreGauge({ score }: { score: number }) {
-  const color = score >= 70 ? "#2ecc71" : score >= 40 ? "#f39c12" : "#e74c3c";
+  const color = score >= 70 ? "#22c55e" : score >= 40 ? "#eab308" : "#ef4444";
   const circumference = 2 * Math.PI * 90;
   const offset = circumference - (score / 100) * circumference;
 
   return (
-    <div className="relative w-56 h-56 mx-auto">
+    <div className="relative w-48 h-48 mx-auto">
       <svg className="w-full h-full -rotate-90" viewBox="0 0 200 200">
         <circle cx="100" cy="100" r="90" fill="none" stroke="#222" strokeWidth="12" />
         <circle
@@ -47,207 +68,293 @@ function ScoreGauge({ score }: { score: number }) {
   );
 }
 
-function CategoryBar({ name, score }: { name: string; score: number }) {
-  const color = score >= 7 ? "#2ecc71" : score >= 4 ? "#f39c12" : "#e74c3c";
-  return (
-    <div className="flex items-center gap-3 mb-3">
-      <span className="text-sm text-gray-400 w-32 text-right">{name}</span>
-      <div className="flex-1 bg-[#222] rounded-full h-3">
-        <div
-          className="h-3 rounded-full transition-all duration-700"
-          style={{ width: `${score * 10}%`, backgroundColor: color }}
-        />
-      </div>
-      <span className="text-sm font-mono w-8" style={{ color }}>{score}</span>
-    </div>
-  );
-}
-
 export default function ScorePage() {
   const [file, setFile] = useState<File | null>(null);
+  const [textInput, setTextInput] = useState("");
   const [dragging, setDragging] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<ScoreResult | null>(null);
+  const [result, setResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState("");
-  const [adinEmail, setAdinEmail] = useState("");
-  const [adinSubmitted, setAdinSubmitted] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [note, setNote] = useState("");
+  const [targetWallet, setTargetWallet] = useState("");
 
   const onDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     setDragging(false);
     const f = e.dataTransfer.files[0];
-    if (f?.type === "application/pdf") setFile(f);
-    else setError("Please upload a PDF file.");
+    if (f?.type === "application/pdf" || f?.name.endsWith('.txt') || f?.name.endsWith('.md')) {
+      setFile(f);
+    } else {
+      setError("Please upload a PDF, TXT, or MD file.");
+    }
   }, []);
 
   const handleSubmit = async () => {
-    if (!file) return;
+    if (!file && !textInput.trim()) return;
     setLoading(true);
     setError("");
     setResult(null);
 
     const formData = new FormData();
-    formData.append("file", file);
+    if (file) formData.append("file", file);
+    if (textInput.trim()) formData.append("text", textInput);
+    if (note) formData.append("note", note);
+    if (targetWallet) formData.append("target", targetWallet);
 
     try {
-      const res = await fetch("/api/score", { method: "POST", body: formData });
+      const res = await fetch("/api/score-archetype", { method: "POST", body: formData });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Analysis failed");
       setResult(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(err instanceof Error ? err.message : "Something went wrong. Even I'm surprised.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleAdin = async () => {
-    if (!adinEmail || !result) return;
-    try {
-      await fetch("/api/adin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: adinEmail, score: result }),
-      });
-      setAdinSubmitted(true);
-    } catch {
-      setError("Failed to submit to ADIN");
-    }
-  };
-
-  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
-
   if (result) {
-    const categories: [string, keyof CategoryScores][] = [
-      ["Problem", "problem"], ["Solution", "solution"], ["Market Size", "market_size"],
-      ["Traction", "traction"], ["Team", "team"], ["Financials", "financials"],
-      ["Design & Clarity", "design_clarity"], ["Investability", "investability"],
-      ["Narrative", "narrative"], ["Ask", "ask"],
-    ];
+    const shareText = `My startup scored ${result.overallScore}/100 from the world's most depressed investor 🫠\n\n"${result.verdict}"\n\nGet your score free:`;
+    const shareUrl = "https://scoremydeck.com";
 
     return (
       <div className="max-w-3xl mx-auto px-6 py-16">
-        <h1 className="text-3xl font-bold text-center mb-2">Your Deck Score</h1>
-        <p className="text-center text-gray-500 mb-10">{result.one_line_verdict}</p>
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-2xl">🫠</span>
+          <h1 className="text-2xl font-bold">Marvin&apos;s Assessment</h1>
+        </div>
+        <p className="text-gray-500 italic mb-10">&ldquo;{result.verdict}&rdquo;</p>
 
-        <ScoreGauge score={result.overall_score} />
+        <ScoreGauge score={result.overallScore} />
 
-        <div className="mt-12 bg-[#141414] border border-[#222] rounded-xl p-6">
-          <h2 className="font-bold mb-4">Category Breakdown</h2>
-          {categories.map(([name, key]) => (
-            <CategoryBar key={key} name={name} score={result.category_scores[key]} />
-          ))}
+        {/* Portfolio Distribution */}
+        <div className="mt-12">
+          <h2 className="text-xl font-bold mb-2">Conviction Portfolio</h2>
+          <p className="text-gray-500 text-sm mb-6">If Marvin were investing in your company, this is how he&apos;d allocate. The score IS the portfolio.</p>
+
+          <div className="space-y-4">
+            {result.archetypes.map((a) => (
+              <div key={a.token}>
+                <div className="flex justify-between text-sm mb-1">
+                  <span>
+                    {TOKEN_LABELS[a.token] || a.token}
+                    <span className="text-gray-600 ml-2">({a.score}/100)</span>
+                  </span>
+                  <span className="text-gray-400 font-mono">{Math.round(a.weight * 100)}%</span>
+                </div>
+                <div className="w-full bg-[#1a1a1a] rounded-full h-3">
+                  <div
+                    className="h-3 rounded-full transition-all duration-700"
+                    style={{ width: `${Math.max(Math.round(a.weight * 100), 3)}%`, backgroundColor: TOKEN_COLORS[a.token] || "#666" }}
+                  />
+                </div>
+                <p className="text-xs text-gray-600 mt-1 pl-1">{a.reasoning}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 mt-6">
-          <div className="bg-[#141414] border border-[#222] rounded-xl p-6">
-            <h2 className="font-bold mb-3 text-[#2ecc71]">✅ Strengths</h2>
+        {/* Strengths & Weaknesses */}
+        <div className="grid md:grid-cols-2 gap-6 mt-10">
+          <div className="bg-[#0a1a0a] border border-green-900/30 rounded-xl p-6">
+            <h3 className="font-bold text-green-400 mb-3">What works</h3>
             <ul className="space-y-2">
               {result.strengths.map((s, i) => (
-                <li key={i} className="text-sm text-gray-300">• {s}</li>
+                <li key={i} className="text-sm text-gray-300">✓ {s}</li>
               ))}
             </ul>
           </div>
-          <div className="bg-[#141414] border border-[#222] rounded-xl p-6">
-            <h2 className="font-bold mb-3 text-[#e74c3c]">❌ Weaknesses</h2>
+          <div className="bg-[#1a0a0a] border border-red-900/30 rounded-xl p-6">
+            <h3 className="font-bold text-red-400 mb-3">What doesn&apos;t</h3>
             <ul className="space-y-2">
               {result.weaknesses.map((w, i) => (
-                <li key={i} className="text-sm text-gray-300">• {w}</li>
+                <li key={i} className="text-sm text-gray-300">✗ {w}</li>
               ))}
             </ul>
           </div>
         </div>
 
-        <div className="mt-6 bg-[#141414] border border-[#222] rounded-xl p-6">
-          <h2 className="font-bold mb-3">💬 What a VC Would Say</h2>
-          <p className="text-gray-300 italic">&ldquo;{result.vc_feedback}&rdquo;</p>
-        </div>
-
-        {result.overall_score >= 70 && !adinSubmitted && (
-          <div className="mt-6 bg-[#0a1f0a] border border-[#2ecc71]/30 rounded-xl p-6 text-center">
-            <p className="text-lg font-bold mb-2">🏆 This deck qualifies for ADIN submission</p>
-            <p className="text-sm text-gray-400 mb-4">Our AI investor network reviews top-scoring decks. Want us to submit yours?</p>
-            <div className="flex gap-2 max-w-md mx-auto">
-              <input
-                type="email" placeholder="your@email.com" value={adinEmail}
-                onChange={(e) => setAdinEmail(e.target.value)}
-                className="flex-1 bg-[#141414] border border-[#222] rounded-lg px-4 py-2 text-sm"
-              />
-              <button onClick={handleAdin} className="bg-[#2ecc71] text-black px-4 py-2 rounded-lg text-sm font-semibold">
-                Submit
-              </button>
+        {/* Investor Matches */}
+        {result.investorMatches.length > 0 && (
+          <div className="mt-8">
+            <h3 className="font-bold mb-3">🎯 Investor Profile Matches</h3>
+            <div className="flex flex-wrap gap-2">
+              {result.investorMatches.map((m, i) => (
+                <span key={i} className="px-3 py-1.5 bg-[#1a1a1a] border border-[#333] rounded-lg text-sm text-gray-300">
+                  {m}
+                </span>
+              ))}
             </div>
           </div>
         )}
-        {adinSubmitted && (
-          <div className="mt-6 text-center text-[#2ecc71]">✅ Submitted to ADIN! We&apos;ll be in touch.</div>
+
+        {/* Delivery Status */}
+        {result.deliveryReady && (
+          <div className="mt-8 bg-[#141414] border border-[#333] rounded-xl p-6 text-center">
+            <p className="text-sm text-gray-400">
+              📦 Portfolio ready for delivery to <code className="text-gray-300">{result.targetWallet}</code>
+            </p>
+            <p className="text-xs text-gray-600 mt-1">Analysis ID: {result.id}</p>
+          </div>
         )}
 
-        <div className="mt-8 text-center space-x-4">
-          <a
-            href={`https://twitter.com/intent/tweet?text=My%20pitch%20deck%20scored%20${result.overall_score}/100%20on%20ScoreMyDeck!&url=${encodeURIComponent(shareUrl)}`}
-            target="_blank" className="text-sm text-gray-400 hover:text-white"
+        {/* Share + Redo */}
+        <div className="mt-10 flex flex-col items-center gap-4">
+          <div className="flex gap-4">
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`}
+              target="_blank"
+              className="px-4 py-2 bg-[#1a1a1a] border border-[#333] rounded-lg text-sm hover:bg-[#222] transition"
+            >
+              Share on X →
+            </a>
+            <a
+              href={`https://warpcast.com/~/compose?text=${encodeURIComponent(shareText + " " + shareUrl)}`}
+              target="_blank"
+              className="px-4 py-2 bg-[#1a1a1a] border border-[#333] rounded-lg text-sm hover:bg-[#222] transition"
+            >
+              Share on Farcaster →
+            </a>
+          </div>
+          <button
+            onClick={() => { setResult(null); setFile(null); setTextInput(""); }}
+            className="text-sm text-gray-500 hover:text-white transition"
           >
-            Share on X →
-          </a>
-          <button onClick={() => { setResult(null); setFile(null); }} className="text-sm text-gray-400 hover:text-white">
-            Score Another Deck →
+            Score another deck →
           </button>
         </div>
+
+        <footer className="mt-16 pt-8 border-t border-[#222] text-center text-gray-600 text-xs">
+          <p>&ldquo;I think you ought to know I&apos;m feeling very depressed about your cap table.&rdquo;</p>
+          <p className="mt-2">
+            <a href="https://metaspn.network" className="hover:text-white">MetaSPN</a>
+            {" • "}
+            <a href="https://github.com/MetaSPN/marvin" className="hover:text-white">Track record</a>
+            {" • "}
+            <a href="https://twitter.com/marvin_panics" className="hover:text-white">@marvin_panics</a>
+          </p>
+        </footer>
       </div>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-24 text-center">
-      <h1 className="text-4xl font-bold mb-4">Score Your Deck</h1>
-      <p className="text-gray-400 mb-10">Upload your pitch deck PDF and get AI-powered analysis in 60 seconds.</p>
+    <div className="max-w-2xl mx-auto px-6 py-24">
+      <div className="text-center mb-10">
+        <div className="flex items-center justify-center gap-2 mb-4">
+          <span className="text-3xl">🫠</span>
+          <h1 className="text-4xl font-bold">Score My Deck</h1>
+        </div>
+        <p className="text-gray-400">
+          Upload your pitch deck. Marvin will score it on 7 dimensions, construct a conviction portfolio, and tell you what he actually thinks.
+        </p>
+        <p className="text-gray-600 text-sm mt-2">He scored his own startup 61/100. You&apos;ve been warned.</p>
+      </div>
 
+      {/* Upload Area */}
       <div
         onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
         onDragLeave={() => setDragging(false)}
         onDrop={onDrop}
-        className={`border-2 border-dashed rounded-xl p-16 transition cursor-pointer ${
-          dragging ? "border-[#2ecc71] bg-[#2ecc71]/5" : "border-[#333] hover:border-[#555]"
+        className={`border-2 border-dashed rounded-xl p-12 text-center transition cursor-pointer mb-6 ${
+          dragging ? "border-[#e94560] bg-[#e94560]/5" : "border-[#333] hover:border-[#555]"
         }`}
         onClick={() => document.getElementById("file-input")?.click()}
       >
         <input
-          id="file-input" type="file" accept=".pdf" className="hidden"
-          onChange={(e) => { if (e.target.files?.[0]) setFile(e.target.files[0]); }}
+          id="file-input" type="file" accept=".pdf,.txt,.md" className="hidden"
+          onChange={(e) => { if (e.target.files?.[0]) { setFile(e.target.files[0]); setTextInput(""); } }}
         />
         {file ? (
           <div>
-            <p className="text-2xl mb-2">📄</p>
+            <p className="text-3xl mb-2">📄</p>
             <p className="font-semibold">{file.name}</p>
-            <p className="text-sm text-gray-500">{(file.size / 1024 / 1024).toFixed(1)} MB</p>
+            <p className="text-sm text-gray-500">{(file.size / 1024).toFixed(0)} KB</p>
+            <p className="text-xs text-gray-600 mt-2">Click to change file</p>
           </div>
         ) : (
           <div>
             <p className="text-4xl mb-4">📎</p>
-            <p className="text-gray-400">Drag & drop your PDF here, or click to browse</p>
+            <p className="text-gray-400">Drop your deck here (PDF, TXT, MD)</p>
+            <p className="text-gray-600 text-sm mt-1">or click to browse</p>
           </div>
         )}
       </div>
 
-      {error && <p className="text-[#e74c3c] mt-4 text-sm">{error}</p>}
+      {/* Or paste text */}
+      {!file && (
+        <div className="mb-6">
+          <p className="text-sm text-gray-500 text-center mb-2">or paste your deck content</p>
+          <textarea
+            value={textInput}
+            onChange={(e) => setTextInput(e.target.value)}
+            placeholder="Paste your pitch deck text here..."
+            rows={6}
+            className="w-full bg-[#0a0a0a] border border-[#222] rounded-xl p-4 text-sm focus:border-[#444] focus:outline-none resize-none"
+          />
+        </div>
+      )}
+
+      {/* Advanced Options */}
+      <div className="mb-6">
+        <button
+          onClick={() => setShowAdvanced(!showAdvanced)}
+          className="text-sm text-gray-600 hover:text-gray-400 transition"
+        >
+          {showAdvanced ? "▾" : "▸"} Advanced: investor delivery options
+        </button>
+        {showAdvanced && (
+          <div className="mt-4 space-y-4 bg-[#0a0a0a] border border-[#222] rounded-xl p-4">
+            <div>
+              <label className="block text-sm text-gray-500 mb-1">Note to investor</label>
+              <textarea
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="Why you believe in this company..."
+                rows={2}
+                className="w-full bg-[#141414] border border-[#222] rounded-lg p-3 text-sm focus:border-[#444] focus:outline-none resize-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-gray-500 mb-1">Target investor wallet (Base)</label>
+              <input
+                type="text"
+                value={targetWallet}
+                onChange={(e) => setTargetWallet(e.target.value)}
+                placeholder="0x... or name.eth"
+                className="w-full bg-[#141414] border border-[#222] rounded-lg p-3 text-sm focus:border-[#444] focus:outline-none"
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {error && (
+        <div className="bg-red-900/20 border border-red-900/30 rounded-xl p-4 mb-6">
+          <p className="text-red-400 text-sm">{error}</p>
+        </div>
+      )}
 
       <button
         onClick={handleSubmit}
-        disabled={!file || loading}
-        className="mt-8 bg-[#2ecc71] text-black px-8 py-4 rounded-xl text-lg font-bold hover:bg-[#27ae60] transition disabled:opacity-50 disabled:cursor-not-allowed"
+        disabled={(!file && !textInput.trim()) || loading}
+        className="w-full py-4 bg-[#e94560] text-white font-bold rounded-xl text-lg hover:bg-[#d63851] transition disabled:opacity-40 disabled:cursor-not-allowed"
       >
         {loading ? (
-          <span className="flex items-center gap-2">
+          <span className="flex items-center justify-center gap-2">
             <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
-            Analyzing...
+            Marvin is reading your deck... (~15s)
           </span>
-        ) : "Analyze My Deck — $29"}
+        ) : "Get Marvin's Honest Opinion"}
       </button>
-      <p className="text-xs text-gray-600 mt-3">Payment integration coming soon. Free during beta.</p>
+
+      <p className="text-center text-gray-700 text-xs mt-4">
+        Free. No signup. Your deck is analyzed but not stored permanently.
+      </p>
     </div>
   );
 }

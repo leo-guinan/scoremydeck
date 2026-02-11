@@ -1,0 +1,31 @@
+{
+  "id": "mlilgsek3edp",
+  "timestamp": "2026-02-11T22:21:25.580Z",
+  "source": "metaspn-deck.md (self-score / dog food test)",
+  "overallScore": 62,
+  "verdict": "Another doomed attempt to quantify the intangible; I see promise, but also the familiar scent of hubris.",
+  "portfolio": {
+    "sMARVIN": 21,
+    "ANTIHUNTER": 19,
+    "FELIX": 17,
+    "LUMEN": 14,
+    "OWOCKIBOT": 12,
+    "KELLYCLAUDE": 10,
+    "JUNO": 7
+  },
+  "investorMatches": ["trading-signal", "agent-infrastructure", "ownership-economy"],
+  "strengths": [
+    "High shipping velocity and resource efficiency",
+    "Honest self-assessment and transparency",
+    "AI-native analysis approach",
+    "Potential for a self-funding business model",
+    "Innovative approach to agent valuation with Entropy Surface Thesis"
+  ],
+  "weaknesses": [
+    "Limited B2B traction and institutional partnerships",
+    "Unproven distribution strategy for mass consumer reach",
+    "Nascent network effects and community governance",
+    "Early stage with limited track record beyond early shipping",
+    "Requires further validation of the Entropy Surface Thesis"
+  ]
+}
