@@ -115,8 +115,7 @@ export default function ScorePage() {
   };
 
   if (result) {
-    const shareText = `My startup scored ${result.overallScore}/100 from the world's most depressed investor 🫠\n\n"${result.verdict}"\n\nGet your score free:`;
-    const shareUrl = "https://scoremydeck.com";
+    const shareText = `My startup scored ${result.overallScore}/100 from the world's most depressed investor 🫠\n\n"${result.verdict}"\n\nGet your score free: https://scoremydeck.com @marvin_panics`;
 
     return (
       <div className="max-w-3xl mx-auto px-6 py-16">
@@ -203,14 +202,14 @@ export default function ScorePage() {
         <div className="mt-10 flex flex-col items-center gap-4">
           <div className="flex gap-4">
             <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`}
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`}
               target="_blank"
               className="px-4 py-2 bg-[#1a1a1a] border border-[#333] rounded-lg text-sm hover:bg-[#222] transition"
             >
               Share on X →
             </a>
             <a
-              href={`https://warpcast.com/~/compose?text=${encodeURIComponent(shareText + " " + shareUrl)}`}
+              href={`https://warpcast.com/~/compose?text=${encodeURIComponent(`My startup scored ${result.overallScore}/100 from the world's most depressed investor 🫠\n\n"${result.verdict}"\n\nGet your score free: https://scoremydeck.com @hitchhikerglitch`)}`}
               target="_blank"
               className="px-4 py-2 bg-[#1a1a1a] border border-[#333] rounded-lg text-sm hover:bg-[#222] transition"
             >
